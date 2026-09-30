@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Raw corpus and benchmark data are large and license-bound to their
+# upstream sources (CUAD / LegalBench-RAG). Only the manifest (SHA-256
+# per file) and version lock are tracked — the raw text is fetched by
+# scripts/fetch_corpus.py, never committed.
+corpus/raw/
+corpus/*.zip
+
+# Per-run trace JSONL files are experiment output, not source. Keep the
+# schema and a couple of sample runs; gitignore the bulk.
+traces/run_*/
+!traces/sample_run/
+
+# Local credentials / API keys if a judge LLM needs one
+credentials.toml
+.env
