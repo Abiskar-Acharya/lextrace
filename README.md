@@ -1,4 +1,4 @@
-# ArXivRAG: a diagnostic evaluation harness for legal RAG retrieval
+# LexTrace: a diagnostic evaluation harness for legal RAG retrieval
 
 **Status:** architecture and methodology specified; no code written, no corpus frozen, no run executed yet. This README will be rewritten once results exist — right now it documents the plan, not a claim.
 
@@ -6,7 +6,7 @@
 
 Most RAG evaluation tools score a pipeline with one number. When that number is bad, nobody can say *why* — was the passage never in the corpus, did the retriever fetch the wrong contract, did the reranker bury the right chunk, or did the generator ignore evidence it had? Collapsing four different bugs into one score is why teams spend months tuning the wrong component.
 
-ArXivRAG is not another RAG chatbot and not another scalar RAG score. It is an instrumented **evaluation harness**: a hybrid retrieval pipeline (BM25 + dense + reciprocal rank fusion + cross-encoder rerank) is run as the *subject under test*, every query is traced span-by-span through the full pipeline, and the trace is checked mechanically — not by an LLM judge — for whether the gold answer span was still reachable at each stage. The first stage where it stops being reachable is where the failure is attributed.
+LexTrace is not another RAG chatbot and not another scalar RAG score. It is an instrumented **evaluation harness**: a hybrid retrieval pipeline (BM25 + dense + reciprocal rank fusion + cross-encoder rerank) is run as the *subject under test*, every query is traced span-by-span through the full pipeline, and the trace is checked mechanically — not by an LLM judge — for whether the gold answer span was still reachable at each stage. The first stage where it stops being reachable is where the failure is attributed.
 
 ## Why legal, why this corpus
 
@@ -17,6 +17,8 @@ LegalBench-RAG's own limitations section states its queries are always answerabl
 ## What this is not
 
 Not a new scalar RAG score (RAGAS, ARES, RAGChecker, CCRS, RAGVUE, Q-CARE already occupy that space, and RAGVUE already does diagnostic/explainable scoring). Not a new stage-attribution method in the abstract (Doctor-RAG and Legal RAG Bench already attribute failures to retrieval/reasoning/hallucination stages on their own corpora). This project's claim to novelty is narrow and stated honestly in `docs/METHODOLOGY.md` section M2: deterministic (non-judge) attribution via gold-span reachability, run at LegalBench-RAG's full scale (6,889 queries vs. Legal RAG Bench's 100 hand-crafted ones), plus the document-conditioning leakage experiment nobody has run on this benchmark yet.
+
+The name: `gold_reach` — the trace field this harness lives or dies on — is a reachability check performed at every handoff in the pipeline, the same function a chain-of-custody log performs for physical evidence. LexTrace names the mechanism, not the domain.
 
 ## Layout
 
